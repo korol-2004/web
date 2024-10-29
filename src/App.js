@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Form from "./Form";
 import Table from "./Table";
+import { Container, Typography } from "@mui/material";
 import "./App.css";
 
 function App() {
@@ -15,21 +16,24 @@ function App() {
     };
 
     return ( <
-        div className = "App" >
+        Container maxWidth = "md"
+        className = "App" >
         <
         header className = "App-header" >
         <
-        h1 > Employee Management < /h1> <
+        Typography variant = "h1"
+        component = "h1" >
+        Employee Management <
+        /Typography> <
         Form handleSubmit = { handleAddEmployee }
         initialEmployee = {
-            { name: "", job: "" }
-        }
+            { name: "", job: "" } }
         /> <
         Table employees = { employees }
         delEmployee = { handleDeleteEmployee }
-        /> < /
-        header > <
-        /div>
+        /> <
+        /header> <
+        /Container>
     );
 }
 

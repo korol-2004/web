@@ -1,33 +1,43 @@
 import React from "react";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
 
-const Table = ({ employees, delEmployee }) => ( <
-    table >
+const EmployeeTable = ({ employees, delEmployee }) => ( <
+    TableContainer component = { Paper }
+    sx = {
+        { mt: 3 } } >
     <
-    thead >
+    Table >
     <
-    tr >
+    TableHead >
     <
-    th > Name < /th> <
-    th > Job < /th> <
-    th > Remove < /th> <
-    /tr> <
-    /thead> <
-    tbody > {
+    TableRow >
+    <
+    TableCell > Name < /TableCell> <
+    TableCell > Job < /TableCell> <
+    TableCell > Remove < /TableCell> <
+    /TableRow> <
+    /TableHead> <
+    TableBody > {
         employees.map((employee) => ( <
-            tr key = { employee.id } >
+            TableRow key = { employee.id } >
             <
-            td > { employee.name } < /td> <
-            td > { employee.job } < /td> <
-            td >
+            TableCell > { employee.name } < /TableCell> <
+            TableCell > { employee.job } < /TableCell> <
+            TableCell >
             <
-            button onClick = {
-                () => delEmployee(employee.id) } > Delete < /button> <
-            /td> <
-            /tr>
+            Button variant = "contained"
+            color = "secondary"
+            onClick = {
+                () => delEmployee(employee.id) } >
+            Delete <
+            /Button> <
+            /TableCell> <
+            /TableRow>
         ))
     } <
-    /tbody> <
-    /table>
+    /TableBody> <
+    /Table> <
+    /TableContainer>
 );
 
-export default Table;
+export default EmployeeTable;
