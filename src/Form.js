@@ -18,61 +18,65 @@ const Form = ({ handleSubmit, initialEmployee }) => {
         setEmployee(initialEmployee);
     };
 
-    return ( <
-        Box component = "form"
-        onSubmit = { onSubmit }
-        sx = {
-            {
+    return (
+        <Box
+            component="form"
+            onSubmit={onSubmit}
+            sx={{
                 mt: 3,
                 p: 2,
                 borderRadius: 1,
                 boxShadow: 2,
                 backgroundColor: '#f5f5f5',
-            }
-        } >
-        <
-        TextField label = "Name"
-        id = "name"
-        name = "name"
-        value = { employee.name }
-        onChange = { handleChange }
-        fullWidth margin = "normal"
-        variant = "outlined"
-        sx = {
-            {
-                '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': {
-                        borderColor: 'primary.main',
+            }}
+        >
+            <TextField
+                label="Name"
+                id="name"
+                name="name"
+                value={employee.name}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: 'primary.main',
+                        },
                     },
-                },
-            }
-        }
-        /> <
-        TextField label = "Job"
-        id = "job"
-        name = "job"
-        value = { employee.job }
-        onChange = { handleChange }
-        fullWidth margin = "normal"
-        variant = "outlined"
-        sx = {
-            {
-                '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': {
-                        borderColor: 'primary.main',
+                }}
+            />
+            <TextField
+                label="Job"
+                id="job"
+                name="job"
+                value={employee.job}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        '&.Mui-focused fieldset': {
+                            borderColor: 'primary.main',
+                        },
                     },
-                },
-            }
-        }
-        /> <
-        Button variant = "contained"
-        color = "primary"
-        type = "submit"
-        sx = {
-            { mt: 2, backgroundColor: 'primary.main', '&:hover': { backgroundColor: 'primary.dark' } } } >
-        Add <
-        /Button> <
-        /Box>
+                }}
+            />
+            <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                sx={{
+                    mt: 2,
+                    backgroundColor: 'primary.main',
+                    '&:hover': { backgroundColor: 'primary.dark' }
+                }}
+            >
+                Add
+            </Button>
+        </Box>
     );
 };
 
