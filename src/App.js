@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Form from "./Form";
-import Table from "./Table";
+import EmployeeTable from "./EmployeeTable"; // изменённое имя компонента
+import Summary from "./Summary"; // новый импорт
 import { Container, Typography, Button } from "@mui/material";
 import "./App.css";
 
@@ -32,7 +33,10 @@ function App() {
                 </nav>
                 <Routes>
                     <Route path="/" element={<Form handleSubmit={handleAddEmployee} initialEmployee={{ name: "", job: "" }} />} />
-                    <Route path="/employees" element={<Table employees={employees} delEmployee={handleDeleteEmployee} />} />
+                    <Route path="/employees" element={<>
+                        <EmployeeTable employees={employees} delEmployee={handleDeleteEmployee} />
+                        <Summary employees={employees} />
+                    </>} />
                 </Routes>
             </Container>
         </Router>
