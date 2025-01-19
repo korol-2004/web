@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Form from "./Form";
-import EmployeeTable from "./EmployeeTable"; // изменённое имя компонента
-import Summary from "./Summary"; // новый импорт
+import EmployeeTable from "./EmployeeTable"; 
+import Summary from "./Summary"; 
 import { Container, Typography, Button } from "@mui/material";
 import "./App.css";
 

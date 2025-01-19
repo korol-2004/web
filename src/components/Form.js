@@ -15,7 +15,8 @@ const Form = ({ handleSubmit, initialEmployee }) => {
     const onSubmit = (event) => {
         event.preventDefault();
         handleSubmit(employee);
-        setEmployee(initialEmployee);
+        // Удаляем следующую строку, чтобы не сбрасывать форму
+        // setEmployee(initialEmployee);
     };
 
     return (
