@@ -1,10 +1,10 @@
 import React from 'react';
-import Navbar from './Navbar';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import BooksList from './BookList';
-import LoanRecords from './LoanRecords';
-import Home from './Home';
-import Users from './Users';
+import Navbar from './components/Navbar';
+import Home from './components/Home';
+import BookList from './components/BookList';
+import LoanRecords from './components/LoanRecords';
+import Users from './components/Users';
 
 const App = () => {
   return (
@@ -12,7 +12,7 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/books" element={<BooksList />} />
+        <Route path="/books" element={<BookList />} />
         <Route path="/loans" element={<LoanRecords />} />
         <Route path="/users" element={<Users />} />
       </Routes>

@@ -1,11 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box } from '@material-ui/core';
+import logo from '../assets/logo.svg'; // Импорт логотипа
 
 const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
+        <img src={logo} alt="Логотип" style={{ width: 40, marginRight: 10 }} />
         <Typography variant="h6" component={Link} to="/" className="navbar-brand">
           Библиотека
         </Typography>
