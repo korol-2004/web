@@ -1,13 +1,31 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Select, MenuItem } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Select, MenuItem, Modal, Box, Typography } from '@material-ui/core';
 import { useForm, Controller } from 'react-hook-form';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
 
 const LoanRecords = () => {
   const [loanRecords, setLoanRecords] = useState([]);
   const [books, setBooks] = useState([]);
   const [users, setUsers] = useState([]);
+  const [open, setOpen] = useState(false);
   const { control, handleSubmit, reset } = useForm();
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    reset();
+  };
 
   useEffect(() => {
     axios.get("http://localhost:8088/api/loans")
@@ -45,7 +63,7 @@ const LoanRecords = () => {
     axios.post("http://localhost:8088/api/loans/issue", newLoanRecord)
       .then(response => {
         setLoanRecords(prevRecords => [...prevRecords, response.data]);
-        reset();
+        handleClose();
       })
       .catch(error => {
         console.error(error);
@@ -70,48 +88,62 @@ const LoanRecords = () => {
   return (
     <div>
       <h1>Список записей о выдаче/возврате книг</h1>
-      <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 20 }}>
-        <h2>Выдать книгу</h2>
-        <div style={{ marginBottom: 20 }}>
-          <label>Книга:</label>
-          <Controller
-            name="book"
-            control={control}
-            rules={{ required: 'Выберите книгу' }}
-            render={({ field, fieldState: { error } }) => (
-              <div>
-                <Select {...field} style={{ width: 300 }}>
-                  <MenuItem value={null}>Выберите книгу</MenuItem>
-                  {books.map(book => (
-                    <MenuItem key={book.id} value={book}>{book.title} ({book.author})</MenuItem>
-                  ))}
-                </Select>
-                {error && <p style={{ color: 'red' }}>{error.message}</p>}
-              </div>
-            )}
-          />
-        </div>
-        <div style={{ marginBottom: 20 }}>
-          <label>Пользователь:</label>
-          <Controller
-            name="user"
-            control={control}
-            rules={{ required: 'Выберите пользователя' }}
-            render={({ field, fieldState: { error } }) => (
-              <div>
-                <Select {...field} style={{ width: 300 }}>
-                  <MenuItem value={null}>Выберите пользователя</MenuItem>
-                  {users.map(user => (
-                    <MenuItem key={user.id} value={user}>{user.username}</MenuItem>
-                  ))}
-                </Select>
-                {error && <p style={{ color: 'red' }}>{error.message}</p>}
-              </div>
-            )}
-          />
-        </div>
-        <Button type="submit" variant="contained" color="primary">Выдать книгу</Button>
-      </form>
+      <Button variant="contained" color="primary" onClick={handleOpen}>
+        Выдать книгу
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Выдать книгу
+          </Typography>
+          <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 20 }}>
+            <div style={{ marginBottom: 20 }}>
+              <label>Книга:</label>
+              <Controller
+                name="book"
+                control={control}
+                rules={{ required: 'Выберите книгу' }}
+                render={({ field, fieldState: { error } }) => (
+                  <div>
+                    <Select {...field} style={{ width: 300 }}>
+                      <MenuItem value={null}>Выберите книгу</MenuItem>
+                      {books.map(book => (
+                        <MenuItem key={book.id} value={book}>{book.title} ({book.author})</MenuItem>
+                      ))}
+                    </Select>
+                    {error && <p style={{ color: 'red' }}>{error.message}</p>}
+                  </div>
+                )}
+              />
+            </div>
+            <div style={{ marginBottom: 20 }}>
+              <label>Пользователь:</label>
+              <Controller
+                name="user"
+                control={control}
+                rules={{ required: 'Выберите пользователя' }}
+                render={({ field, fieldState: { error } }) => (
+                  <div>
+                    <Select {...field} style={{ width: 300 }}>
+                      <MenuItem value={null}>Выберите пользователя</MenuItem>
+                      {users.map(user => (
+                        <MenuItem key={user.id} value={user}>{user.username}</MenuItem>
+                      ))}
+                    </Select>
+                    {error && <p style={{ color: 'red' }}>{error.message}</p>}
+                  </div>
+                )}
+              />
+            </div>
+            <Button type="submit" variant="contained" color="primary">Выдать книгу</Button>
+          </form>
+        </Box>
+      </Modal>
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableHead>
