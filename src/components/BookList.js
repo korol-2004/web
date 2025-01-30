@@ -2,53 +2,40 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBooks, addBook, updateBook, deleteBook } from '../features/bookSlice';
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Button } from '@material-ui/core';
+import { useForm, Controller } from 'react-hook-form';
 
 const BookList = () => {
   const dispatch = useDispatch();
   const books = useSelector((state) => state.books);
-  const [book, setBook] = useState({ id: 0, title: '', author: '', isbn: '' });
   const [isEdit, setIsEdit] = useState(false);
+  const { control, handleSubmit, reset, setValue } = useForm({
+    defaultValues: {
+      title: '',
+      author: '',
+      isbn: ''
+    }
+  });
 
   useEffect(() => {
     dispatch(fetchBooks());
   }, [dispatch]);
 
-  const handleAddBook = () => {
-    if (book.title.trim() === '' || book.author.trim() === '' || book.isbn.trim() === '') {
-      alert('Пожалуйста, заполните все поля');
-      return;
+  const onSubmit = (data) => {
+    if (isEdit) {
+      dispatch(updateBook(data));
+    } else {
+      dispatch(addBook(data));
     }
-
-    const newBook = {
-      title: book.title,
-      author: book.author,
-      isbn: book.isbn
-    };
-
-    dispatch(addBook(newBook));
-    setBook({ id: 0, title: '', author: '', isbn: '' });
+    reset();
+    setIsEdit(false);
   };
 
   const handleEditBook = (book) => {
     setIsEdit(true);
-    setBook(book);
-  };
-
-  const handleUpdateBook = () => {
-    if (book.title.trim() === '' || book.author.trim() === '' || book.isbn.trim() === '') {
-      alert('Пожалуйста, заполните все поля');
-      return;
-    }
-
-    const updatedBook = {
-      title: book.title,
-      author: book.author,
-      isbn: book.isbn
-    };
-
-    dispatch(updateBook(updatedBook));
-    setIsEdit(false);
-    setBook({ id: 0, title: '', author: '', isbn: '' });
+    setValue('id', book.id);
+    setValue('title', book.title);
+    setValue('author', book.author);
+    setValue('isbn', book.isbn);
   };
 
   const handleDeleteBook = (bookId) => {
@@ -58,25 +45,53 @@ const BookList = () => {
   return (
     <div>
       <h1>Список книг</h1>
-      <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 20 }}>
-        <h2>Добавить книгу</h2>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 20 }}>
+        <h2>{isEdit ? 'Редактировать книгу' : 'Добавить книгу'}</h2>
         <div style={{ marginBottom: 20 }}>
           <label>Название:</label>
-          <input type="text" value={book.title} onChange={(e) => setBook({ ...book, title: e.target.value })} style={{ width: 300 }} />
+          <Controller
+            name="title"
+            control={control}
+            rules={{ required: 'Название обязательно' }}
+            render={({ field, fieldState: { error } }) => (
+              <div>
+                <input {...field} style={{ width: 300 }} />
+                {error && <p style={{ color: 'red' }}>{error.message}</p>}
+              </div>
+            )}
+          />
         </div>
         <div style={{ marginBottom: 20 }}>
           <label>Автор:</label>
-          <input type="text" value={book.author} onChange={(e) => setBook({ ...book, author: e.target.value })} style={{ width: 300 }} />
+          <Controller
+            name="author"
+            control={control}
+            rules={{ required: 'Автор обязателен' }}
+            render={({ field, fieldState: { error } }) => (
+              <div>
+                <input {...field} style={{ width: 300 }} />
+                {error && <p style={{ color: 'red' }}>{error.message}</p>}
+              </div>
+            )}
+          />
         </div>
         <div style={{ marginBottom: 20 }}>
           <label>ISBN:</label>
-          <input type="text" value={book.isbn} onChange={(e) => setBook({ ...book, isbn: e.target.value })} style={{ width: 300 }} />
+          <Controller
+            name="isbn"
+            control={control}
+            rules={{ required: 'ISBN обязателен' }}
+            render={({ field, fieldState: { error } }) => (
+              <div>
+                <input {...field} style={{ width: 300 }} />
+                {error && <p style={{ color: 'red' }}>{error.message}</p>}
+              </div>
+            )}
+          />
         </div>
-        {isEdit ? (
-          <Button onClick={handleUpdateBook} variant="contained" color="primary">Обновить</Button>
-        ) : (
-          <Button onClick={handleAddBook} variant="contained" color="primary">Добавить</Button>
-        )}
+        <Button type="submit" variant="contained" color="primary">
+          {isEdit ? 'Обновить' : 'Добавить'}
+        </Button>
       </form>
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
